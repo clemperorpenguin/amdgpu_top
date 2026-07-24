@@ -3,7 +3,7 @@ use cursive::views::{LinearLayout, TextView, Panel, ResizedView};
 use cursive::view::SizeConstraint;
 
 use libamdgpu_top::AMDGPU::{GPU_INFO, MetricsInfo};
-use libamdgpu_top::{AppDeviceInfo, DevicePath, Sampling, stat::FdInfoSortType};
+use libamdgpu_top::{AppDeviceInfo, DevicePath, GetNpuMetrics, Sampling, stat::FdInfoSortType};
 use libamdgpu_top::xdna;
 
 use crate::{ToggleOptions, view::*};
@@ -274,8 +274,10 @@ impl TuiApp {
             flags.reverse_sort,
         );
 
+        let npu_metrics = self.app_amdgpu_top.stat.metrics.as_ref().and_then(|m| m.get_npu_metrics());
+
         if self.app_amdgpu_top.xdna_device_path.is_some() {
-            let _ = self.layout.xdna_fdinfo_view.print_xdna_fdinfo(&mut self.app_amdgpu_top.stat.xdna_fdinfo);
+            let _ = self.layout.xdna_fdinfo_view.print_xdna_fdinfo(&mut self.app_amdgpu_top.stat.xdna_fdinfo, &npu_metrics);
         }
 
         self.layout.vram_usage_view.set_value(&self.app_amdgpu_top.stat.vram_usage);
