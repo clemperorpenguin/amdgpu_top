@@ -39,6 +39,11 @@ build step has network access, so it can vendor the crates for you:
 Builds made from a commit that is not a `vX.Y.Z` tag get a snapshot release such
 as `0.11.5-1.20260809git97daebf`.
 
+Copr runs the Makefile with the working directory set to the package's
+configured *subdirectory*, so leaving that empty and setting only the spec file
+path is the straightforward setup. `.copr/Makefile` locates the repository from
+its own path rather than from `$PWD`, so a subdirectory of `rpm` works too.
+
 ## Building by hand
 
     version=0.11.5
